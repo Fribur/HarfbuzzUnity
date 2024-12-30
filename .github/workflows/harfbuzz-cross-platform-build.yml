@@ -1,4 +1,4 @@
-name: acl-cross-platform-build
+name: harfbuzz-cross-platform-build
 
 on:
   push:
@@ -24,17 +24,19 @@ jobs:
         run: python -m pip install meson ninja
       - name: Build linux x86
         run: |
+          cd harfbuzz
           meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
           meson compile -C build
           objcopy --only-keep-debug build/src/libharfbuzz.so build/src/libharfbuzz.so.debug
           strip --strip-debug build/src/libharfbuzz.so
           objcopy --add-gnu-debuglink=build/src/libharfbuzz.so.debug build/src/libharfbuzz.so
+          cd ..
       - name: Upload linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-artifacts
           path: |
-            ./build*/**/*.so*
+            ./harfbuzz/build*/**/*.so*
             
   windows:
     runs-on: windows-2022
@@ -51,15 +53,17 @@ jobs:
         run: python -m pip install meson ninja
       - name: Build windows x86
         run: |
+          cd harfbuzz
           meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
           meson compile -C build
+          cd ..
       - name: Upload windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-artifacts
           path: |
-            ./build*/**/*.dll
-            ./build*/**/*.pdb
+            ./harfbuzz/build*/**/*.dll
+            ./harfbuzz/build*/**/*.pdb
             
   osx:
     runs-on: macos-14
@@ -76,11 +80,13 @@ jobs:
         run: python -m pip install meson ninja
       - name: Build osx universal
         run: |
+          cd harfbuzz
           meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
           meson compile -C build
+          cd ..
       - name: Upload osx artifacts
         uses: actions/upload-artifact@v4
         with:
           name: osx-artifacts
           path: |
-            ./build*/**/*.dylib
+            ./harfbuzz/build*/**/*.dylib
