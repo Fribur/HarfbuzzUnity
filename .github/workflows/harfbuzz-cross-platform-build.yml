@@ -1,0 +1,68 @@
+name: acl-cross-platform-build
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - docs/**
+      - '**/*.md'
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Build linux x86
+        run: |
+          meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
+          meson compile -C build
+          objcopy --only-keep-debug build/src/libharfbuzz.so build/src/libharfbuzz.so.debug
+          strip --strip-debug build/src/libharfbuzz.so
+          objcopy --add-gnu-debuglink=build/src/libharfbuzz.so.debug build/src/libharfbuzz.so
+      - name: Upload linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-artifacts
+          path: |
+            ./build*/**/*.so*
+            
+  windows:
+    runs-on: windows-2022
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Build windows x86
+        run: |
+          meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
+          meson compile -C build
+      - name: Upload windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifacts
+          path: |
+            ./build*/**/*.dll
+            ./build*/**/*.pdb
+            
+  osx:
+    runs-on: macos-14
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Build osx universal
+        run: |
+          meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
+          meson compile -C build
+      - name: Upload osx artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: osx-artifacts
+          path: |
+            ./build*/**/*.dylib
