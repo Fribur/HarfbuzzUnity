@@ -36,7 +36,8 @@ jobs:
         with:
           name: linux-artifacts
           path: |
-            ./harfbuzz/build*/**/*.so*
+            ./harfbuzz/build*/**/*.so
+            ./harfbuzz/build*/**/*.so.debug
             
   windows:
     runs-on: windows-2022
@@ -54,7 +55,7 @@ jobs:
       - name: Build windows x86
         run: |
           cd harfbuzz
-          meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
+          meson setup build --vsenv --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled
           meson compile -C build
           cd ..
       - name: Upload windows artifacts
