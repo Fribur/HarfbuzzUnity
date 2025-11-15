@@ -20,7 +20,7 @@ endian = 'little'
 #result = run_command('xcrun', '--sdk', 'iphoneos', '--show-sdk-path', check: true)
 #sdk_path = result.stdout().strip()
 #errortxt = result.stderr().strip()
-sdk_path = '/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk'
+sdk_path = '/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk'
 
 [properties]
 # If building for the iOS simulator, you would use needs_exe_wrapper = true
@@ -32,5 +32,3 @@ cpp_args = ['-mios-version-min=13.0', '-arch', 'arm64', '-isysroot', sdk_path]
 c_link_args = ['-mios-version-min=13.0', '-arch', 'arm64', '-isysroot', sdk_path]
 cpp_link_args = ['-mios-version-min=13.0', '-arch', 'arm64', '-isysroot', sdk_path]
 default_library = 'static'
-
-

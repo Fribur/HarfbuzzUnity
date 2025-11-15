@@ -20,7 +20,7 @@ endian = 'little'
 #result = run_command('xcrun', '--sdk', 'iphonesimulator', '--show-sdk-path', check: true)
 #sdk_path = result.stdout().strip()
 #errortxt = result.stderr().strip()
-sdk_path = '/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.2.sdk'
+sdk_path = '/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk'
 
 [properties]
 # If building for the iOS simulator, you would use needs_exe_wrapper = true
