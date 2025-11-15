@@ -95,7 +95,7 @@ jobs:
           name: osx-artifacts
           path: |
             ./harfbuzz/build/src/*.dylib
-     - name: Upload iOS artifacts
+      - name: Upload iOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: iOS-artifacts
