@@ -83,11 +83,22 @@ jobs:
         run: |
           cd harfbuzz
           meson setup build --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled -Dgobject=disabled -Dchafa=disabled
-          meson compile -C build
+          meson compile -C build          
+          meson setup build_ios_device --cross-file ../ios_crossfile_device.txt --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled -Dgobject=disabled -Dchafa=disabled
+          meson compile -C build_ios_device          
+          meson setup build_ios_simulator --cross-file ../ios_crossfile_simulator.txt --wrap-mode=default --buildtype=minsize -Dtests=disabled -Dutilities=disabled -Db_lto=true -Dfreetype=disabled -Dglib=disabled -Dcairo=disabled -Dicu=disabled -Dgobject=disabled -Dchafa=disabled
+          meson compile -C build_ios_simulator
           cd ..
       - name: Upload osx artifacts
         uses: actions/upload-artifact@v4
         with:
           name: osx-artifacts
           path: |
-            ./harfbuzz/build*/**/*.dylib
+            ./harfbuzz/build/src/*.dylib
+     - name: Upload iOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS-artifacts
+          path: |
+            ./harfbuzz/build_ios_device/src/*.a
+            ./harfbuzz/build_ios_simulator/src/*.a
