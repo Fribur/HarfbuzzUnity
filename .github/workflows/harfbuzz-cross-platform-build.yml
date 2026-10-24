@@ -38,6 +38,7 @@ jobs:
           meson setup build \
             --buildtype=minsize \
             --wrap-mode=forcefallback \
+            -Dcpp_args='-U_GLIBCXX_ASSERTIONS' \
             -Dtests=disabled \
             -Dutilities=disabled \
             -Db_lto=true \
